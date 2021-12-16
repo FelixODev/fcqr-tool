@@ -1,20 +1,121 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
+  <ion-toolbar *ngIf="qrs?.codes[itr]">
+    <ion-buttons slot="start">
+      <ion-button (click)="editing = !editing">
+        <ion-icon [name]="(editing)?'close-outline':'create-outline'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title *ngIf="!editing" (click)="editing = true">
+      <!-- FC {{"Tools"|translate}} -->
+      {{qrs?.codes[itr].name}}
     </ion-title>
+    <ion-input *ngIf="editing" [(ngModel)]="qrs.codes[itr].name"></ion-input>
+    <ion-buttons slot="end" *ngIf="qrs.codes.length>1">
+      <ion-button (click)="deleteList(itr)">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" #content>
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+      <ion-title size="large">FC {{"Tools"|translate}}</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <div id="container" *ngIf="qrs.codes[itr].values.length == 0" class="ion-margin-horizontal ion-padding-horizontal">
+    <strong>{{"home1"|translate}}</strong>
+    <p>{{"home2"|translate}} <a target="_blank" rel="noopener noreferrer" href="https://atoz.amazon.work">AtoZ</a></p>
   </div>
+
+  <!-- [elementType]="elementType"  -->
+  <!-- errorCorrectionLevel = "L" -->
+
+  <ion-row *ngIf="qrs.codes[itr] as code">
+    <ion-col 
+    *ngFor="let val of code.values; index as i;"
+    size="6" size-sm="3" size-xl="2"
+    >
+      <ion-card 
+      mode="ios" 
+      class="ion-padding" 
+      style="margin-bottom: 0px;"
+      >
+        <ngx-qrcode
+        [value] = "val"
+        (click)="enlarge(val)"
+        ></ngx-qrcode>
+        {{val}}
+        <ion-buttons class="bottom-right">
+          <ion-button size="small" (click)="aud(i, val)" >
+            <ion-icon name="ellipsis-horizontal"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+
+  <div style="height: 75px;"></div>
+
+  <div class="prerender">
+    <span class="material-icons">
+      qr_code_scanner
+    </span>
+    <span class="material-icons">
+      post_add
+    </span>
+    <span class="material-icons">
+      dashboard_customize
+    </span>
+  </div>
+  
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+
+    <ion-fab-button class="fab" #fab>
+      <ion-icon name="ellipsis-vertical"></ion-icon>
+    </ion-fab-button>
+
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="save(qrs); fab">
+        <ion-icon name="save"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="push(); fab">
+        <!-- <ion-icon name="qr-code"></ion-icon> -->
+        <!-- <ion-icon name="add" style="position: absolute; bottom: 1; right: 1;"></ion-icon> -->
+        <span class="material-icons">
+          post_add
+        </span>
+      </ion-fab-button>
+      <ion-fab-button (click)="aud(); fab">
+        <span class="material-icons">
+          dashboard_customize
+        </span>
+      </ion-fab-button>
+      <ion-fab-button (click)="scan(); fab">
+        <span class="material-icons">
+          qr_code_scanner
+        </span>
+      </ion-fab-button>
+    </ion-fab-list>
+  
+  </ion-fab>
+
 </ion-content>
+
+<ion-footer>
+  <ion-tab-bar>
+      <ion-tab-button 
+      tab="home" 
+      (click)="switch(c)"
+      [selected]="itr==c"
+      *ngFor="let code of qrs.codes; index as c;" 
+      >
+        <ion-icon name="qr-code"></ion-icon>
+        <ion-label>
+          {{code?.name||'Qr'}}
+        </ion-label>
+      </ion-tab-button>
+  </ion-tab-bar>
+</ion-footer>

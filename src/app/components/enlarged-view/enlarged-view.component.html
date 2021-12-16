@@ -1,0 +1,20 @@
+<ion-content
+class="ion-padding"
+*ngIf="props?.val as val"
+>
+  <ngx-qrcode
+  [value] = "val"
+  >
+  </ngx-qrcode>
+  <h1 class="ion-text-center">
+    {{ val }}
+  </h1>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
