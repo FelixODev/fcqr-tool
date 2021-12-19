@@ -219,7 +219,8 @@ export class HomePage {
     await this.db.doc.update({
       c: 'qrs', d: qrs?.id,
       set: qrs
-    })
+    });
+    window.localStorage.setItem('id', qrs?.id);
   }
 
 

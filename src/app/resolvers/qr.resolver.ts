@@ -15,7 +15,7 @@ export class QrResolver implements Resolve<any> {
   constructor(public db: DBService){}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-    const d = route.params.qr_id;
+    const d = route.params.qr_id||JSON.stringify(window.localStorage.getItem('id'));
     const qrs = this.db.doc.get$({doc:'qrs/'+d});
     return qrs;
     return of(d);
