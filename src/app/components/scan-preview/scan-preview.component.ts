@@ -18,7 +18,7 @@ export class ScanPreviewComponent implements OnInit {
   }
 
   close() {
-    this.ctrl.dismiss();
+    this.ctrl.dismiss(false);
   }
 
 }

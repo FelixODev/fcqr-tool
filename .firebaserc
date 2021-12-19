@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "fo-test-app"
+  },
+  "targets": {
+    "fo-test-app": {
+      "hosting": {
+        "amznqr": [
+          "amznqr"
+        ]
+      }
+    }
   }
 }

@@ -10,9 +10,12 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "init": "npm i -g @ionic/cli @angular/cli firebase-tools && firebase login --no-localhost",
+    "git": "git add . && git commit -am '...' && git push -u origin main",
     "fire": "firebase deploy --only hosting",
     "deploy-prod": "ionic build --prod && npm run fire",
     "dp": "npm run deploy-prod",
+    "gdp": "npm run git && npm run dp",
     "deploy-cap-prod": "ionic capacitor build --prod browser && npm run fire",
     "dcp": "npm run deploy-cap-prod"
   },

@@ -172,10 +172,11 @@ export class HomePage {
 
 
   async scan() {
-    await this.popup({
+    const success = await this.popup({
       c: ScanPreviewComponent,
       func: this.decode
     });
+    if(success === true)
     this.content.scrollToBottom(300);
   }
 
@@ -188,7 +189,7 @@ export class HomePage {
       // console.log(`Code matched = ${decodedText}${decodedResult}`);
       qrs.push(decodedText);
       html5QrcodeScanner.clear();
-      ctrl.dismiss()
+      ctrl.dismiss(true);
     }
     
     function onScanFailure(error: any) {
@@ -198,7 +199,13 @@ export class HomePage {
     }
     
     let html5QrcodeScanner = new Html5QrcodeScanner(
-      "reader", { fps: 15, qrbox: {width: 250, height: 250} }, /* verbose= */ false
+      "reader", { 
+        fps: 15, 
+        qrbox: {width: 250, height: 250},
+        experimentalFeatures: {
+          useBarCodeDetectorIfSupported: true
+        } 
+      }, /* verbose= */ false
     );
     html5QrcodeScanner.render(onScanSuccess, onScanFailure);
   }
@@ -276,6 +283,7 @@ export class HomePage {
 
     await pop.present();
     const res = await pop.onDidDismiss();
+    return res.data
   }
 
   log(p: any) {
