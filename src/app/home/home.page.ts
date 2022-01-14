@@ -216,11 +216,13 @@ export class HomePage {
   }
 
   async save(qrs: { id: any; }) {
+    const id = qrs?.id||this.db.doc.createId();
     await this.db.doc.update({
-      c: 'qrs', d: qrs?.id,
+      c: 'qrs', d: id,
       set: qrs
     });
-    window.localStorage.setItem('id', qrs?.id);
+    // this.log(id);
+    window.localStorage.setItem('id', id);
   }
 
 
@@ -251,9 +253,9 @@ export class HomePage {
     .replaceAll(/\bwhy\b/ig, 'y');
     
 
-    // if(!text.match(/[a-z]/i) && text[1]!=='-'||'_'){
-    //   text = text.replaceAll('-'||'.'||'('||')', '');
-    // }
+    if(text.match(/^\D*(\d\D*){11,15}$/)){
+      text = text.replaceAll('-'||'.'||'('||')', '');
+    }
 
     if(text[1]=='-'||'_'||'a' || text[0]==/p/ig){
       text = text.toUpperCase().replaceAll('.','');

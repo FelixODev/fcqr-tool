@@ -26,10 +26,13 @@ export class DBService {
       return this.db.doc(p?.d||p?.doc)?.valueChanges({idField:'id'})?.pipe(take(1))
     },
     get: async (p) => {
-      return await this.doc.get$(p).toPromise()
+      return this.doc.get$(p).toPromise()
     },
     update: async (p:any) => {
-      return await this.db.collection(p.c).doc(p.d).set(p.set, {merge: true})
+      return this.db.collection(p.c).doc(p.d).set(p.set, {merge: true})
+    },
+    createId: () => {
+      return this.db.createId();
     }
   }
 }
