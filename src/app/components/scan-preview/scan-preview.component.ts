@@ -11,13 +11,16 @@ export class ScanPreviewComponent implements OnInit {
   func;
   ctrl;
 
+  inst;
+
   constructor() { }
 
   ngOnInit() {
-    this.func(this.ctrl);
+    this.inst = this.func(this.ctrl);
   }
 
   close() {
+    this.inst.clear()
     this.ctrl.dismiss(false);
   }
 

@@ -176,6 +176,7 @@ export class HomePage {
       c: ScanPreviewComponent,
       func: this.decode
     });
+
     if(success === true)
     this.content.scrollToBottom(300);
   }
@@ -207,7 +208,10 @@ export class HomePage {
         } 
       }, /* verbose= */ false
     );
+
     html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+
+    return html5QrcodeScanner
   }
 
   push() {
