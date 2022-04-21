@@ -1,9 +1,16 @@
 {
   "projects": {
-    "default": "fo-test-app"
+    "default": "amznqr"
   },
   "targets": {
     "fo-test-app": {
+      "hosting": {
+        "fo-test-app": [
+          "fo-test-app"
+        ]
+      }
+    },
+    "amznbbq": {
       "hosting": {
         "amznqr": [
           "amznqr"

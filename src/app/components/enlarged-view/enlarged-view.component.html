@@ -6,7 +6,7 @@ class="ion-padding"
   [value] = "val"
   >
   </ngx-qrcode>
-  <h1 class="ion-text-center">
+  <h1 class="ion-text-center" (click)="copyText(val)">
     {{ val }}
   </h1>
 </ion-content>

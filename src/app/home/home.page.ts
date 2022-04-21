@@ -10,6 +10,7 @@ import { DBService } from '../modules/fire/fire.service';
 import { Observable } from "rxjs";
 import { ScanPreviewComponent } from "../components/scan-preview/scan-preview.component";
 import { EnlargedViewComponent } from "../components/enlarged-view/enlarged-view.component";
+import { CopyService } from "../services/copy.service";
 
 @Component({
   selector: 'app-home',
@@ -31,7 +32,8 @@ export class HomePage {
   private alert: AlertController,
   private db: DBService,
   private modal: ModalController,
-  private popover: PopoverController
+  private popover: PopoverController,
+  private copy: CopyService
   ) {}
   
   async ngOnInit() {
@@ -227,6 +229,10 @@ export class HomePage {
     });
     // this.log(id);
     window.localStorage.setItem('id', id);
+  }
+  
+  async copyText(p) {
+    await this.copy.toClipboard(p);
   }
 
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CopyService } from 'src/app/services/copy.service';
 
 @Component({
   selector: 'app-enlarged-view',
@@ -10,12 +11,16 @@ export class EnlargedViewComponent implements OnInit {
   props;
   ctrl;
 
-  constructor() { }
+  constructor(private copy: CopyService) { }
 
   ngOnInit() {}
 
   close() {
     this.ctrl.dismiss();
+  }
+
+  async copyText(p){
+    await this.copy.toClipboard(p)
   }
 
 }

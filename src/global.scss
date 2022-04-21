@@ -40,9 +40,12 @@
     flex-direction: column-reverse !important;
 }
 
-.prerender, .pre-render {
+.pr, .prerender, .pre-render {
     color: transparent !important;
     position: absolute !important;
+    top: 0;
+    right: -100;
+    z-index: -5000;
 }
 
 .bottom-right {

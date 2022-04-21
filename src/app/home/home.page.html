@@ -47,29 +47,21 @@
         [value] = "val"
         (click)="enlarge(val)"
         ></ngx-qrcode>
-        {{val}}
-        <ion-buttons class="bottom-right">
-          <ion-button size="small" (click)="aud(i, val)" >
-            <ion-icon name="ellipsis-horizontal"></ion-icon>
-          </ion-button>
-        </ion-buttons>
+
+          <ion-label (click)="copyText(val)">
+            {{val}}
+          </ion-label>
+          
+          <ion-buttons class="bottom-right">
+            <ion-button size="small" (click)="aud(i, val)" >
+              <ion-icon name="ellipsis-horizontal"></ion-icon>
+            </ion-button>
+          </ion-buttons>
       </ion-card>
     </ion-col>
   </ion-row>
 
   <div style="height: 75px;"></div>
-
-  <div class="prerender">
-    <span class="material-icons">
-      qr_code_scanner
-    </span>
-    <span class="material-icons">
-      post_add
-    </span>
-    <span class="material-icons">
-      dashboard_customize
-    </span>
-  </div>
   
   <ion-fab horizontal="end" vertical="bottom" slot="fixed">
 
@@ -105,17 +97,47 @@
 </ion-content>
 
 <ion-footer>
-  <ion-tab-bar>
-      <ion-tab-button 
-      tab="home" 
-      (click)="switch(c)"
-      [selected]="itr==c"
-      *ngFor="let code of qrs.codes; index as c;" 
-      >
-        <ion-icon name="qr-code"></ion-icon>
-        <ion-label>
-          {{code?.name||'Qr'}}
-        </ion-label>
-      </ion-tab-button>
+  <ion-tab-bar *ngIf="qrs?.codes?.length == 0">
+    <ion-tab-button
+    tab="0"
+    selected="true"
+    >
+      <ion-icon name="qr-code"></ion-icon>
+      <ion-label>
+        {{qrs?.codes[0].name||'Qr'}}
+      </ion-label>
+    </ion-tab-button>
   </ion-tab-bar>
+  <ion-toolbar *ngIf="qrs?.codes?.length != 0">
+    <ion-segment scrollable>
+        <ion-segment-button 
+        class="ion-align-center"
+        [value]="c" 
+        (click)="switch(c)"
+        *ngFor="let code of qrs.codes; index as c;" 
+        >
+        <!-- [selected]="itr==c" -->
+          <ion-icon size="small" name="qr-code"></ion-icon>
+          <ion-label>
+            {{code?.name||'Qr'}}
+          </ion-label>
+        </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-footer>
+
+
+
+
+
+<div class="prerender">
+  <span class="material-icons">
+    qr_code_scanner
+  </span>
+  <span class="material-icons">
+    post_add
+  </span>
+  <span class="material-icons">
+    dashboard_customize
+  </span>
+</div>
