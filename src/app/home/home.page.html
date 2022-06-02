@@ -7,6 +7,7 @@
     </ion-buttons>
     <ion-title *ngIf="!editing" (click)="editing = true">
       <!-- FC {{"Tools"|translate}} -->
+      <!-- <ion-img src="/assets/icon/a.png"></ion-img> -->
       {{qrs?.codes[itr].name}}
     </ion-title>
     <ion-input *ngIf="editing" [(ngModel)]="qrs.codes[itr].name"></ion-input>

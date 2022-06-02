@@ -4,17 +4,27 @@ import { QrResolver } from './resolvers/qr.resolver';
 
 const routes: Routes = [
   {
-    path: 'home',
+    path: 'c',
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
   {
-    path: 'home/:qr_id',
+    path: 'c/:qr_id',
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),
     resolve: { qr: QrResolver }
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'c',
+    pathMatch: 'full'
+  },
+  {
+    path: 'home',
+    redirectTo: 'c',
+    pathMatch: 'full'
+  },
+  {
+    path: 'home/:qr_id',
+    redirectTo: 'c/:qr_id',
     pathMatch: 'full'
   },
 ];

@@ -85,12 +85,15 @@ export class HomePage {
       cssClass: 'custom-alert',
       inputs:[{
         type: 'text',
-        value: value||''
+        value: value||'',
+        id: 'audInput'
       }],
       buttons: bs
     });
     
     await a.present();
+    const input :HTMLElement = document.querySelector("#audInput");
+    input.focus();
     
     const res = await a.onDidDismiss();
     const v = (res?.data)[0];
