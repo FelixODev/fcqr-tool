@@ -75,7 +75,8 @@ export class HomePage {
       text: 'Save',
       handler: (e: any) => {
         return e
-      }
+      },
+      cssClass: 'abtn'
     }];
 
     const bs = ((b_i)?ud:add);
@@ -92,8 +93,15 @@ export class HomePage {
     });
     
     await a.present();
+
+    const btn :HTMLElement = document.querySelector(".abtn");
     const input :HTMLElement = document.querySelector("#audInput");
     input.focus();
+    input.onpaste = async () => {
+      setTimeout(()=>{
+        btn.click();
+      }, 50);
+    };
     
     const res = await a.onDidDismiss();
     const v = (res?.data)[0];
