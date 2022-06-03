@@ -71,7 +71,7 @@
     </ion-fab-button>
 
     <ion-fab-list side="top">
-      <ion-fab-button (click)="save(qrs); fab">
+      <ion-fab-button *ngIf="!qrs.id" (click)="save(qrs); fab">
         <ion-icon name="save"></ion-icon>
       </ion-fab-button>
       <ion-fab-button (click)="push(); fab">

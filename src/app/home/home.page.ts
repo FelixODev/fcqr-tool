@@ -11,6 +11,8 @@ import { Observable } from "rxjs";
 import { ScanPreviewComponent } from "../components/scan-preview/scan-preview.component";
 import { EnlargedViewComponent } from "../components/enlarged-view/enlarged-view.component";
 import { CopyService } from "../services/copy.service";
+import { App } from '@capacitor/app';
+
 
 @Component({
   selector: 'app-home',
@@ -34,16 +36,18 @@ export class HomePage {
   private modal: ModalController,
   private popover: PopoverController,
   private copy: CopyService
-  ) {}
+  ) {
+  }
   
   async ngOnInit() {
     const qrs = (await this.p(this.route.data))?.qr;
-      // this.log(qrs);
-      // this.log(this.qrs);
     if(qrs?.codes) {
-      // this.value = qr?.code||qr;
       this.qrs = qrs;
     }
+    App.addListener('appStateChange', ({ isActive }) => {
+      if (!isActive&&this.qrs.id)
+        this.save(this.qrs).then().catch();
+    });
   }
 
   async aud(i?:any, value?:string) {
