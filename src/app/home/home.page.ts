@@ -58,6 +58,7 @@ export class HomePage implements OnInit {
     this.shi = document.querySelector(".shi");
     this.shi.onpaste = () => {
       this.qrs.codes[this.itr].values || (this.qrs.codes[this.itr].values = []);
+      this.content.scrollToBottom(300);
       setTimeout(()=>{
         this.qrs.codes[this.itr].values.push(this.shdwiText);
         this.shdwiText = '';
@@ -134,8 +135,8 @@ export class HomePage implements OnInit {
       // this.log(this.qrs);
   
       if(del!==true && v?.length > 0){
-        const text = this.sanatize(v);
-  
+        this.content.scrollToBottom(300);
+        const text = this.sanatize(v);  
         if(b_i)
           this.qrs.codes[this.itr].values[i]=text;
         else 
