@@ -2,7 +2,7 @@
 // To use Html5QrcodeScanner (more info below)
 import {Html5QrcodeScanner} from "html5-qrcode"
 
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Data } from '@angular/router';
 import { AlertController, ModalController, PopoverController } from '@ionic/angular';
 import { take } from 'rxjs/operators';
@@ -13,13 +13,14 @@ import { EnlargedViewComponent } from "../components/enlarged-view/enlarged-view
 import { CopyService } from "../services/copy.service";
 import { App } from '@capacitor/app';
 
+const pop: any = {};
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
 
   @ViewChild('content') private content: any;
   
@@ -29,6 +30,8 @@ export class HomePage {
   qrs: any = {codes:[{name:'Qr Codes', values:[]}]};
   itr: number = 0;
   editing: boolean = false;
+  shi: HTMLElement;
+  shdwiText: string = '';
 
   constructor(private route: ActivatedRoute,
   private alert: AlertController,
@@ -37,6 +40,11 @@ export class HomePage {
   private popover: PopoverController,
   private copy: CopyService
   ) {
+    App.addListener('appStateChange', ({ isActive }) => {
+      if (isActive)
+        return
+      this.save(this.qrs).then().catch();
+    });
   }
   
   async ngOnInit() {
@@ -44,13 +52,25 @@ export class HomePage {
     if(qrs?.codes) {
       this.qrs = qrs;
     }
-    App.addListener('appStateChange', ({ isActive }) => {
-      if (!isActive&&this.qrs.id)
-        this.save(this.qrs).then().catch();
-    });
+  }
+
+  ionViewDidEnter() {
+    this.shi = document.querySelector(".shi");
+    this.shi.onpaste = () => {
+      this.qrs.codes[this.itr].values || (this.qrs.codes[this.itr].values = []);
+      setTimeout(()=>{
+        this.qrs.codes[this.itr].values.push(this.shdwiText);
+        this.shdwiText = '';
+      }, 50);
+    };    
   }
 
   async aud(i?:any, value?:string) {
+
+    const fname = "aud";
+    if(pop[fname] && pop[fname] == true)
+      return;
+    pop[fname] = true;
 
     let del:boolean;
     const b_i = i>=0;
@@ -98,29 +118,32 @@ export class HomePage {
     
     await a.present();
 
-    const btn :HTMLElement = document.querySelector(".abtn");
-    const input :HTMLElement = document.querySelector("#audInput");
+    const btn: HTMLElement = document.querySelector(".abtn");
+    const input: HTMLElement = document.querySelector("#audInput");
     input.focus();
-    input.onpaste = async () => {
+    input.onpaste = () => {
       setTimeout(()=>{
         btn.click();
       }, 50);
     };
     
-    const res = await a.onDidDismiss();
-    const v = (res?.data)[0];
-
-    // this.log(del);
-    // this.log(this.qrs);
-
-    if(del!==true && v?.length > 0){
-      const text = this.sanatize(v);
-
-      if(b_i)
-        this.qrs.codes[this.itr].values[i]=text;
-      else 
-        this.qrs.codes[this.itr].values.push(text);
-    }
+    await a.onDidDismiss().then(res => {
+      const v = (res?.data)[0];
+  
+      // this.log(del);
+      // this.log(this.qrs);
+  
+      if(del!==true && v?.length > 0){
+        const text = this.sanatize(v);
+  
+        if(b_i)
+          this.qrs.codes[this.itr].values[i]=text;
+        else 
+          this.qrs.codes[this.itr].values.push(text);
+      }
+  
+      pop[fname] = false;
+    }).catch(r => pop[fname] = false);
   }
 
 
@@ -137,6 +160,11 @@ export class HomePage {
   }
 
   async deleteList(i: any) {
+
+    const fname = "del";
+    if(pop[fname] && pop[fname] == true)
+      return;
+    pop[fname] = true;
 
     let del:boolean;
 
@@ -157,18 +185,18 @@ export class HomePage {
     
     await a.present();
 
-    const res = await a.onDidDismiss();
-    const v = (res?.data)[0];
-
-    if(del===true)
-      if(this.itr>0) {
-        this.qrs.codes.splice(i,1);
-        this.itr-=1;
-      } else {
-        this.qrs.codes.shift();
-        this.itr=0;
-      }
-
+    await a.onDidDismiss().then(res => {
+      pop[fname] = false;
+      const v = (res?.data)[0];
+      if(del===true)
+        if(this.itr>0) {
+          this.qrs.codes.splice(i,1);
+          this.itr-=1;
+        } else {
+          this.qrs.codes.shift();
+          this.itr=0;
+        }
+    }).catch(r => pop[fname] = false);
   }
 
   async enlarge(qr) {
@@ -195,7 +223,7 @@ export class HomePage {
     });
 
     if(success === true)
-    this.content.scrollToBottom(300);
+      this.content.scrollToBottom(300);
   }
 
   decode = (ctrl)=> {

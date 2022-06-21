@@ -19,7 +19,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" #content>
+<ion-content [fullscreen]="true" #content (click)="shdwi.setFocus();">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">FC {{"Tools"|translate}}</ion-title>
@@ -33,6 +33,8 @@
 
   <!-- [elementType]="elementType"  -->
   <!-- errorCorrectionLevel = "L" -->
+  
+  <ion-input class="shi" #shdwi [(ngModel)]="shdwiText" autofocus="true" clear-on-edit="true" inputmode="none"></ion-input>
 
   <ion-row *ngIf="qrs.codes[itr] as code">
     <ion-col 
@@ -71,7 +73,7 @@
     </ion-fab-button>
 
     <ion-fab-list side="top">
-      <ion-fab-button *ngIf="!qrs.id" (click)="save(qrs); fab">
+      <ion-fab-button (click)="save(qrs); fab">
         <ion-icon name="save"></ion-icon>
       </ion-fab-button>
       <ion-fab-button (click)="push(); fab">
@@ -95,7 +97,6 @@
   
   </ion-fab>
 
-  <ion-input #shdwi hidden="true"></ion-input>
 </ion-content>
 
 <ion-footer>
